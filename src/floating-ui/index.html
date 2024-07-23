@@ -2,10 +2,117 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdn.jsdelivr.net/npm/@floating-ui/core@1.6.4"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.6.7"></script>
-    <link href="./output.css" rel="stylesheet" />
+    <link href="../output.css" rel="stylesheet" />
     <title>Document</title>
+    <style>
+      #tooltip {
+        display: none;
+        width: max-content;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: #222;
+        color: white;
+        font-weight: bold;
+        padding: 5px;
+        border-radius: 4px;
+        font-size: 90%;
+      }
+
+      #arrow {
+        position: absolute;
+        background: #222;
+        width: 8px;
+        height: 8px;
+        transform: rotate(45deg);
+      }
+    </style>
   </head>
-  <body></body>
+  <body>
+    <button
+      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+      id="button"
+      aria-describedby="tooltip"
+    >
+      My button
+    </button>
+    <div id="tooltip" role="tooltip">
+      <div>
+        <h2 class="text-red-400">Content should show when hover for test1</h2>
+        <p class="underline">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis
+          dignissim libero ac rutrum ultricies. Aliquam fermentum vestibulum
+          lacus et interdum. Donec luctus libero vitae lacinia sagittis. Sed sit
+          amet elementum nisi. Etiam mauris velit, imperdiet nec ex a,
+          ullamcorper lobortis dui. Donec ut est augue. Class aptent taciti
+          sociosqu ad litora torquent per conubia nostra, per inceptos
+          himenaeos. Curabitur suscipit ipsum quis est commodo congue. Sed
+          fermentum ligula leo, eu iaculis dui tristique in. Aenean id felis et
+          ligula semper faucibus. Curabitur at lacinia quam, id porta enim.
+        </p>
+      </div>
+      <div id="arrow"></div>
+    </div>
+
+    <script type="module">
+      import {
+        computePosition,
+        flip,
+        offset,
+        shift,
+        arrow,
+      } from 'https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.6.7/+esm';
+
+      const button = document.querySelector('#button');
+      const tooltip = document.querySelector('#tooltip');
+      const arrowElement = document.querySelector('#arrow');
+      function update() {
+        computePosition(button, tooltip, {
+          placement: 'top',
+          middleware: [offset(6), flip(), shift({ padding: 5 }), arrow({ element: arrowElement })],
+        }).then(({ x, y, placement, middlewareData }) => {
+          Object.assign(tooltip.style, {
+            left: `${x}px`,
+            top: `${y}px`,
+          });
+
+          // Accessing the data
+          const { x: arrowX, y: arrowY } = middlewareData.arrow;
+
+          const staticSide = {
+            top: 'bottom',
+            right: 'left',
+            bottom: 'top',
+            left: 'right',
+          }[placement.split('-')[0]];
+
+          Object.assign(arrowElement.style, {
+            left: arrowX != null ? `${arrowX}px` : '',
+            top: arrowY != null ? `${arrowY}px` : '',
+            right: '',
+            bottom: '',
+            [staticSide]: '-4px',
+          });
+        });
+      }
+
+      function showTooltip() {
+        tooltip.style.display = 'block';
+        update();
+      }
+
+      function hideTooltip() {
+        tooltip.style.display = '';
+      }
+
+      [
+        ['mouseenter', showTooltip],
+        ['mouseleave', hideTooltip],
+        ['focus', showTooltip],
+        ['blur', hideTooltip],
+      ].forEach(([event, listener]) => {
+        button.addEventListener(event, listener);
+      });
+    </script>
+  </body>
 </html>
