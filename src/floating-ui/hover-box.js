@@ -1,25 +1,38 @@
-import {computePosition} from 'https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.6.7/+esm';
+import { computePosition, flip, offset, shift, arrow } from 'https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.6.7/+esm';
 
 const template = document.createElement('template');
 template.innerHTML = `
   <style>
-    .box {
+    #tooltip {
+      display: none;
+      width: max-content;
       position: absolute;
-      height: auto;
-      border: solid 2px var(--border-color);
-      border-radius: 10px;
-      margin-top: 0px;
-      padding: 20px;
-      z-index: 999999;
-    } 
+      top: 0;
+      left: 0;
+      background: #222;
+      color: white;
+      font-weight: bold;
+      padding: 5px;
+      border-radius: 4px;
+      font-size: 90%;
+    }
+
+    #arrow {
+      position: absolute;
+      background: #222;
+      width: 8px;
+      height: 8px;
+      transform: rotate(45deg);
+    }
   </style>
 
   <div class='hover-box'>
     <span id='hover-trigger'>
       <slot name="hover-trigger"/>
     </span>
-    <div id='hover-content' class='box' style="visibility:hidden">
-      <slot name="hover-content" />
+    <div id="tooltip" role="tooltip">
+      <slot name="tooltip" />      
+      <div id="arrow"></div>
     </div>
   </div>
 `;
@@ -27,76 +40,74 @@ template.innerHTML = `
 customElements.define(
   'hover-box',
   class HoverBox extends HTMLElement {
-    onHover() {
-      this.hoverContent.style.width = this.width + "px";
-      this.hoverContent.style.color = this.color;
-      this.hoverContent.style.background = this.backgroundColor;
-      this.hoverContent.style.borderColor = this.borderColor;
-
-      const contentWidth = this.hoverContent.getBoundingClientRect().width;
-      const contentHeight = this.hoverContent.getBoundingClientRect().height;
-
-      const rect = this.hoverTrigger.getBoundingClientRect();
-      const triggerTop = rect.top + window.scrollY;
-      const triggerLeft = rect.left + window.scrollX;
-      // const triggerBottom = rect.right + window.scrollX
-      const triggerRight = rect.right + window.scrollX
-      const triggerBottom = rect.bottom + window.scrollY
-      const triggerHeight = rect.height;
-      const triggerWidth = rect.width;
-
-      const halfWinWidth = window.innerWidth / 2;
-      const halfWinHeight = window.innerHeight / 2;
-      
-
-      if (triggerLeft + triggerWidth / 2 <= halfWinWidth) {
-        this.hoverContent.style.left = (triggerLeft + triggerWidth) + 'px';
-      } else {
-        this.hoverContent.style.left = (triggerLeft - this.width -45) + 'px';
-      }
-      
-      this.hoverContent.style.top = triggerTop + 'px';
-      
-      
-
-      this.hoverContent.style.visibility='visible';
-    }
-
     constructor() {
       super();
-      this.onHover = this.onHover.bind(this);
-      this.timerHandle = undefined;
+      // bind functions
+      this.update = this.update.bind(this);
+      this.showTooltip = this.showTooltip.bind(this);
+      this.hideTooltip = this.hideTooltip.bind(this);
 
       this.attachShadow({ mode: 'open' });
 
       this.shadowRoot.appendChild(template.content.cloneNode(true));
-      this.hoverTrigger = this.shadowRoot.querySelector('#hover-trigger');
-      this.hoverContent = this.shadowRoot.querySelector('#hover-content');
 
-      this.width = parseInt(this.getAttribute('width') ?? '500');
-      this.color = this.getAttribute('color') ?? 'balck';
-      this.backgroundColor = this.getAttribute('backgroundColor') ?? 'white';
-      this.borderColor = this.getAttribute('borderColor') ?? '334155';
+      this.hoverTrigger = this.shadowRoot.querySelector('#hover-trigger');
+      this.tooltip = this.shadowRoot.querySelector('#tooltip');
+      this.arrowElement = this.shadowRoot.querySelector('#arrow');
+    }
+
+    update() {
+      computePosition(this.hoverTrigger, this.tooltip, {
+        placement: 'top',
+        middleware: [offset(6), flip(), shift({ padding: 5 }), arrow({ element: this.arrowElement })],
+      }).then(({ x, y, placement, middlewareData }) => {
+        Object.assign(this.tooltip.style, {
+          left: `${x}px`,
+          top: `${y}px`,
+        });
+
+        // Accessing the data
+        const { x: arrowX, y: arrowY } = middlewareData.arrow;
+
+        const staticSide = {
+          top: 'bottom',
+          right: 'left',
+          bottom: 'top',
+          left: 'right',
+        }[placement.split('-')[0]];
+
+        Object.assign(this.arrowElement.style, {
+          left: arrowX != null ? `${arrowX}px` : '',
+          top: arrowY != null ? `${arrowY}px` : '',
+          right: '',
+          bottom: '',
+          [staticSide]: '-4px',
+        });
+      });
+    }
+
+    showTooltip() {
+      this.tooltip.style.display = 'block';
+      this.update();
+    }
+
+    hideTooltip() {
+      this.tooltip.style.display = '';
     }
 
     connectedCallback() {
-      this.hoverTrigger.addEventListener('mouseover', () => {
-           this.timerHandle = window.setTimeout(this.onHover, 500);
-      });
-      this.hoverTrigger.addEventListener('mouseout', (e) => {
-        if (this.timerHandle) {
-          window.clearTimeout(this.timerHandle);
-        }
-        // this.hoverContent.style.visibility = 'hidden';
+      [
+        ['mouseenter', this.showTooltip],
+        ['mouseleave', this.hideTooltip],
+        ['focus', this.showTooltip],
+        ['blur', this.hideTooltip],
+      ].forEach(([event, listener]) => {
+        this.hoverTrigger.addEventListener(event, listener);
       });
     }
 
     disconnectedCallback() {
       this.hoverTrigger.removeEventListener();
-    }
-
-    attributeChangedCallback(name, oldValue, newValue) {
-      console.log(`Attribute ${name} has changed. oldValue=${oldValue}, newValue=${newValue}`);
     }
   }
 );
