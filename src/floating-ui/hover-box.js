@@ -3,18 +3,21 @@ import { computePosition, flip, offset, shift, arrow } from 'https://cdn.jsdeliv
 const template = document.createElement('template');
 template.innerHTML = `
   <style>
+
     #tooltip {
       display: none;
       width: max-content;
       position: absolute;
       top: 0;
       left: 0;
-      background: #222;
-      color: white;
       font-weight: bold;
       padding: 5px;
       border-radius: 4px;
-      font-size: 90%;
+    }
+
+    #hover-trigger {
+      width: max-content;
+      height: max-content;
     }
 
     #arrow {
@@ -27,11 +30,11 @@ template.innerHTML = `
   </style>
 
   <div class='hover-box'>
-    <span id='hover-trigger'>
+    <div id='hover-trigger'>
       <slot name="hover-trigger"/>
-    </span>
+    </div>
     <div id="tooltip" role="tooltip">
-      <slot name="tooltip" />      
+      <slot name="tooltip">
       <div id="arrow"></div>
     </div>
   </div>
@@ -54,6 +57,16 @@ customElements.define(
       this.hoverTrigger = this.shadowRoot.querySelector('#hover-trigger');
       this.tooltip = this.shadowRoot.querySelector('#tooltip');
       this.arrowElement = this.shadowRoot.querySelector('#arrow');
+
+      this.color = this.getAttribute('color') ?? 'balck';
+      this.backgroundColor = this.getAttribute('backgroundColor') ?? 'white';
+      this.borderColor = this.getAttribute('borderColor') ?? '334155';
+
+      Object.assign(this.tooltip.style, {
+        color: this.color,
+        backgroundColor: this.backgroundColor,
+        borderColor: this.borderColor
+      })
     }
 
     update() {
@@ -77,13 +90,21 @@ customElements.define(
         }[placement.split('-')[0]];
 
         Object.assign(this.arrowElement.style, {
-          left: arrowX != null ? `${arrowX}px` : '',
-          top: arrowY != null ? `${arrowY}px` : '',
+          left: !!arrowX ? `${arrowX}px` : '',
+          top: !!arrowY ? `${arrowY}px` : '',
           right: '',
           bottom: '',
           [staticSide]: '-4px',
         });
       });
+    }
+
+    getFirstChild(el){
+      var firstChild = el.firstChild;
+      while(firstChild != null && firstChild.nodeType == 3){ // skip TextNodes
+        firstChild = firstChild.nextSibling;
+      }
+      return firstChild;
     }
 
     showTooltip() {
