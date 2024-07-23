@@ -22,7 +22,10 @@
 	// Configure tool-specific properties.
 	"customizations": { 
 		"vscode": {
-			"extensions": ["bradlc.vscode-tailwindcss", "esbenp.prettier-vscode", "ritwickdey.LiveServer"]
+			"extensions": ["bradlc.vscode-tailwindcss", "esbenp.prettier-vscode", "ritwickdey.LiveServer"],
+			"settings": {
+				"editor.formatOnSave": true
+			}
 		}
 	}
 
