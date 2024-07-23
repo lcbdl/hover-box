@@ -51,35 +51,30 @@ customElements.define(
       this.color = this.getAttribute('color') ?? 'balck';
       this.backgroundColor = this.getAttribute('backgroundColor') ?? 'white';
       this.borderColor = this.getAttribute('borderColor') ?? '334155';
+
+      this.hoverContent.style.color = this.color,
+      this.hoverContent.style.background = this.backgroundColor,
+      this.hoverContent.style.borderColor = this.borderColor
     }
 
     getHiddenElementHeight(ele) {
-      Object.assign(ele.style, {
-        left: '-99999px',
-        display: 'block'
-      });
+      ele.style.left ='-99999px';
       const rect = ele.getBoundingClientRect();
-      Object.assign(ele.style, {
-        left: '0px',
-        display: 'none'
-      });
+      ele.style.left = '0px';
+      ele.style.display = 'none';
       return rect;
     }
 
     onHover() {
-      Object.assign(this.hoverContent.style, {
-        color: this.color,
-        background: this.backgroundColor,
-        borderColor: this.borderColor
-      })
-      
-      const {height: contentHeight, width: contentWidth} = this.getHiddenElementHeight(this.hoverContent);
+      //const {height: contentHeight, width: contentWidth} = this.getHiddenElementHeight(this.hoverContent);
+      const contentHeight = 500;
+      const contentWidht = 300;
       
       const rect = this.hoverTrigger.getBoundingClientRect();
-      const triggerTop = rect.top + window.scrollY;
-      const triggerLeft = rect.left + window.scrollX;
-      const triggerBottom = rect.bottom + window.scrollY;
-      const triggerRight = rect.right + window.scrollX;
+      const triggerTop = rect.top; // + window.scrollY;
+      const triggerLeft = rect.left; //  + window.scrollX;
+      const triggerBottom = rect.bottom; // + window.scrollY;
+      const triggerRight = rect.right; // + window.scrollX;
       const triggerHeight = rect.height;
       const triggerWidth = rect.width;
 
@@ -94,11 +89,9 @@ customElements.define(
         contentTop = triggerTop - OFFSET - contentHeight;
       }
 
-      Object.assign(this.hoverContent.style, {
-        left: `$(contentLeft)px`,
-        top: `$(contentTop)px`,
-        display: 'block'
-      });
+      this.hoverContent.style.left = `$(contentLeft)px`,
+      this.hoverContent.style.top = `$(contentTop)px`,
+      this.hoverContent.style.display = 'block';
     }
 
     
