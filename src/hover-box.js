@@ -10,59 +10,35 @@ template.innerHTML = `
       padding: 20px;
       z-index: 999999;
     } 
+    
+    #hover-trigger {
+      width: max-content;
+      height: max-content;
+    }
   </style>
 
   <div class='hover-box'>
-    <span id='hover-trigger'>
+    <div id='hover-trigger'>
       <slot name="hover-trigger"/>
-    </span>
-    <div id='hover-content' class='box' style="visibility:hidden">
+    </div>
+    <div id='hover-content' class='box' style="display:none">
       <slot name="hover-content" />
     </div>
   </div>
 `;
 
+
+const OFFSET = 6;
+
 customElements.define(
   'hover-box',
   class HoverBox extends HTMLElement {
-    onHover() {
-      this.hoverContent.style.width = this.width + "px";
-      this.hoverContent.style.color = this.color;
-      this.hoverContent.style.background = this.backgroundColor;
-      this.hoverContent.style.borderColor = this.borderColor;
-
-      const contentWidth = this.hoverContent.getBoundingClientRect().width;
-      const contentHeight = this.hoverContent.getBoundingClientRect().height;
-
-      const rect = this.hoverTrigger.getBoundingClientRect();
-      const triggerTop = rect.top + window.scrollY;
-      const triggerLeft = rect.left + window.scrollX;
-      // const triggerBottom = rect.right + window.scrollX
-      const triggerRight = rect.right + window.scrollX
-      const triggerBottom = rect.bottom + window.scrollY
-      const triggerHeight = rect.height;
-      const triggerWidth = rect.width;
-
-      const halfWinWidth = window.innerWidth / 2;
-      const halfWinHeight = window.innerHeight / 2;
-      
-
-      if (triggerLeft + triggerWidth / 2 <= halfWinWidth) {
-        this.hoverContent.style.left = (triggerLeft + triggerWidth) + 'px';
-      } else {
-        this.hoverContent.style.left = (triggerLeft - this.width -45) + 'px';
-      }
-      
-      this.hoverContent.style.top = triggerTop + 'px';
-      
-      
-
-      this.hoverContent.style.visibility='visible';
-    }
 
     constructor() {
       super();
+      this.getHiddenElementHeight = this.getHiddenElementHeight.bind(this);
       this.onHover = this.onHover.bind(this);
+
       this.timerHandle = undefined;
 
       this.attachShadow({ mode: 'open' });
@@ -77,6 +53,56 @@ customElements.define(
       this.borderColor = this.getAttribute('borderColor') ?? '334155';
     }
 
+    getHiddenElementHeight(ele) {
+      Object.assign(ele.style, {
+        left: '-99999px',
+        display: 'block'
+      });
+      const rect = ele.getBoundingClientRect();
+      Object.assign(ele.style, {
+        left: '0px',
+        display: 'none'
+      });
+      return rect;
+    }
+
+    onHover() {
+      Object.assign(this.hoverContent.style, {
+        color: this.color,
+        background: this.backgroundColor,
+        borderColor: this.borderColor
+      })
+      
+      const {height: contentHeight, width: contentWidth} = this.getHiddenElementHeight(this.hoverContent);
+      
+      const rect = this.hoverTrigger.getBoundingClientRect();
+      const triggerTop = rect.top + window.scrollY;
+      const triggerLeft = rect.left + window.scrollX;
+      const triggerBottom = rect.bottom + window.scrollY;
+      const triggerRight = rect.right + window.scrollX;
+      const triggerHeight = rect.height;
+      const triggerWidth = rect.width;
+
+      window.innerHeight
+      window.innerWidth
+
+      let contentTop = 0;
+      let contentLeft = 0;
+      if (triggerBottom + OFFSET + contentHeight < window.innerHeight) {
+        contentTop = triggerBottom + OFFSET;
+      } else {
+        contentTop = triggerTop - OFFSET - contentHeight;
+      }
+
+      Object.assign(this.hoverContent.style, {
+        left: `$(contentLeft)px`,
+        top: `$(contentTop)px`,
+        display: 'block'
+      });
+    }
+
+    
+
     connectedCallback() {
       this.hoverTrigger.addEventListener('mouseover', () => {
            this.timerHandle = window.setTimeout(this.onHover, 500);
@@ -85,7 +111,7 @@ customElements.define(
         if (this.timerHandle) {
           window.clearTimeout(this.timerHandle);
         }
-        // this.hoverContent.style.visibility = 'hidden';
+        // this.hoverContent.style.display = 'none';
       });
     }
 
