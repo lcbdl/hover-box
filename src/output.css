@@ -662,6 +662,10 @@ h2 {
   background-color: rgb(96 165 250 / var(--tw-bg-opacity));
 }
 
+.bg-\[3788d8\] {
+  background-color: 3788d8;
+}
+
 .px-2 {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
