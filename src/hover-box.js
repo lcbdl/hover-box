@@ -1,7 +1,8 @@
 const template = document.createElement("template");
 template.innerHTML = `
   <style>
-    .box {
+  :host {
+    #hover-content {
       position: absolute;
       height: auto;
       border: solid 2px;
@@ -15,13 +16,14 @@ template.innerHTML = `
       width: max-content;
       height: max-content;
     }
+  }
   </style>
 
   <div class='hover-box'>
     <div id='hover-trigger'>
       <slot name='hover-trigger'/>
     </div>
-    <div id='hover-content' class='box' style='display:none'>
+    <div id='hover-content' style='display:none'>
       <slot name='hover-content' />
     </div>
   </div>
