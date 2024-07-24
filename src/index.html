@@ -39,23 +39,38 @@
 
     <div class="flex flex-row-reverse">
       <div>
-        <hover-box>
-            <button slot="hover-trigger"
-              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-            >
-              Test 2
-            </button>
-          </slot>
+        <hover-box width="340">
+          <button
+            slot="hover-trigger"
+            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+          >
+            Test 2
+          </button>
           <div slot="hover-content">
-            <h2>Content should show when hover for test2</h2>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dignissim libero ac rutrum ultricies.
-              Aliquam fermentum vestibulum lacus et interdum. Donec luctus libero vitae lacinia sagittis. Sed sit amet
-              elementum nisi. Etiam mauris velit, imperdiet nec ex a, ullamcorper lobortis dui. Donec ut est augue.
-              Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur
-              suscipit ipsum quis est commodo congue. Sed fermentum ligula leo, eu iaculis dui tristique in. Aenean id
-              felis et ligula semper faucibus. Curabitur at lacinia quam, id porta enim.
-            </p>
+            <div class="grid grid-flow-row grid-cols-1">
+              <div class="px-2 py-2 bg-blue-400 text-white text-lg font-bold">
+                Example Event
+              </div>
+              <div>
+                <div class="px-2 pt-1">
+                  July 18, 2024 10:00 to July 19, 2024 13:00
+                </div>
+                <div class="px-2">
+                  <span class="font-bold">Location: </span>Microsoft Teams
+                </div>
+                <div class="px-2 pb-1">
+                  <span class="font-bold">Organizer: </span>Spencer Van Buskirk
+                </div>
+                <div class="bg-gray-100 px-2 py-1">
+                  <div class="font-bold">Event Description</div>
+                  <div class="text-wrap">
+                    Generic description of event to talk about topics relating
+                    to PHAC
+                  </div>
+                </div>
+              </div>
+              <div></div>
+            </div>
           </div>
         </hover-box>
       </div>
@@ -86,18 +101,19 @@
       lacinia quam, id porta enim.
     </p>
     <hover-box>
-      <span slot="hover-trigger">
-        --- Hover me ---
-      </span>
+      <span slot="hover-trigger"> --- Hover me --- </span>
       <div slot="hover-content">
         <h2>--- Hover me ---</h2>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dignissim libero ac rutrum ultricies.
-          Aliquam fermentum vestibulum lacus et interdum. Donec luctus libero vitae lacinia sagittis. Sed sit amet
-          elementum nisi. Etiam mauris velit, imperdiet nec ex a, ullamcorper lobortis dui. Donec ut est augue.
-          Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur
-          suscipit ipsum quis est commodo congue. Sed fermentum ligula leo, eu iaculis dui tristique in. Aenean id
-          felis et ligula semper faucibus. Curabitur at lacinia quam, id porta enim.
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis
+          dignissim libero ac rutrum ultricies. Aliquam fermentum vestibulum
+          lacus et interdum. Donec luctus libero vitae lacinia sagittis. Sed sit
+          amet elementum nisi. Etiam mauris velit, imperdiet nec ex a,
+          ullamcorper lobortis dui. Donec ut est augue. Class aptent taciti
+          sociosqu ad litora torquent per conubia nostra, per inceptos
+          himenaeos. Curabitur suscipit ipsum quis est commodo congue. Sed
+          fermentum ligula leo, eu iaculis dui tristique in. Aenean id felis et
+          ligula semper faucibus. Curabitur at lacinia quam, id porta enim.
         </p>
       </div>
     </hover-box>
@@ -115,22 +131,26 @@
     <div class="flex flex-row">
       <div>
         <hover-box>
-          
-            <button slot="hover-trigger"
-              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-            >
-              Test 3
-            </button>
-          
+          <button
+            slot="hover-trigger"
+            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+          >
+            Test 3
+          </button>
+
           <div slot="hover-content">
             <h2>Content should show when hover for test3</h2>
             <p class="text-xs">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dignissim libero ac rutrum ultricies.
-              Aliquam fermentum vestibulum lacus et interdum. Donec luctus libero vitae lacinia sagittis. Sed sit amet
-              elementum nisi. Etiam mauris velit, imperdiet nec ex a, ullamcorper lobortis dui. Donec ut est augue.
-              Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur
-              suscipit ipsum quis est commodo congue. Sed fermentum ligula leo, eu iaculis dui tristique in. Aenean id
-              felis et ligula semper faucibus. Curabitur at lacinia quam, id porta enim.
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis
+              dignissim libero ac rutrum ultricies. Aliquam fermentum vestibulum
+              lacus et interdum. Donec luctus libero vitae lacinia sagittis. Sed
+              sit amet elementum nisi. Etiam mauris velit, imperdiet nec ex a,
+              ullamcorper lobortis dui. Donec ut est augue. Class aptent taciti
+              sociosqu ad litora torquent per conubia nostra, per inceptos
+              himenaeos. Curabitur suscipit ipsum quis est commodo congue. Sed
+              fermentum ligula leo, eu iaculis dui tristique in. Aenean id felis
+              et ligula semper faucibus. Curabitur at lacinia quam, id porta
+              enim.
             </p>
           </div>
         </hover-box>

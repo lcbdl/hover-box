@@ -5,9 +5,9 @@ template.innerHTML = `
       position: absolute;
       height: auto;
       border: solid 2px;
-      border-radius: 10px;
+      border-radius: 0px;
       margin-top: 0px;
-      padding: 20px;
+      padding: 0px;
       z-index: 999999;
     } 
     
@@ -113,7 +113,7 @@ customElements.define(
         if (this.timerHandle) {
           window.clearTimeout(this.timerHandle);
         }
-        this.hoverContent.style.display = "none";
+        // this.hoverContent.style.display = "none";
       });
     }
 
