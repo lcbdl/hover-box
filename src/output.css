@@ -449,6 +449,7 @@ video {
 html {
   --tw-bg-opacity: 1;
   background-color: rgb(207 250 254 / var(--tw-bg-opacity));
+  padding: 1rem;
 }
 
 h1 {
