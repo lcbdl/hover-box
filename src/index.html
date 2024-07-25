@@ -8,12 +8,7 @@
   <body>
     <h1>This is a regular html page</h1>
 
-    <hover-box
-      width="300"
-      color="black"
-      borderColor="green"
-      backgroundColor="yellow"
-    >
+    <hover-box width="340" hover-title="July 18, 2024">
       <button
         slot="hover-trigger"
         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
@@ -22,24 +17,31 @@
       </button>
 
       <div slot="hover-content">
-        <h2 class="text-red-400">Content should show when hover for test1</h2>
-        <p class="underline">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis
-          dignissim libero ac rutrum ultricies. Aliquam fermentum vestibulum
-          lacus et interdum. Donec luctus libero vitae lacinia sagittis. Sed sit
-          amet elementum nisi. Etiam mauris velit, imperdiet nec ex a,
-          ullamcorper lobortis dui. Donec ut est augue. Class aptent taciti
-          sociosqu ad litora torquent per conubia nostra, per inceptos
-          himenaeos. Curabitur suscipit ipsum quis est commodo congue. Sed
-          fermentum ligula leo, eu iaculis dui tristique in. Aenean id felis et
-          ligula semper faucibus. Curabitur at lacinia quam, id porta enim.
-        </p>
+        <div class="bg-gray-100">
+          <div class="px-2 pt-1 font-bold text-l">
+            First Event (10:00 to 13:00)
+          </div>
+          <div class="px-2">
+            <span class="font-bold">Location: </span>Microsoft Teams
+          </div>
+          <div class="px-2 pb-1">
+            <span class="font-bold">Organizer: </span>Spencer Van Buskirk
+          </div>
+          <div class="px-2 py-1">
+            <div class="font-bold">Event Description</div>
+            <div class="text-wrap">
+              Generic description of event to talk about topics relating to
+              PHAC. Lorem ipsum dolor sit amet, consectetur psum dolor sit amet,
+              consectetur.
+            </div>
+          </div>
+        </div>
       </div>
     </hover-box>
 
     <div class="flex flex-row-reverse">
       <div>
-        <hover-box width="340">
+        <hover-box width="350" hover-title="July 18, 2024 (2 Events)">
           <button
             slot="hover-trigger"
             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
@@ -47,29 +49,43 @@
             Test 2
           </button>
           <div slot="hover-content">
-            <div class="grid grid-flow-row grid-cols-1">
-              <div class="px-2 py-2 bg-[#3788d8] text-white text-lg font-bold">
-                Example Event
+            <div class="bg-gray-100">
+              <div class="px-2 pt-1 font-bold text-l">First Event</div>
+              <div class="px-2 pt-1">
+                (July 18, 2024 10:00 to July 19, 2024 13:00)
               </div>
-              <div>
-                <div class="px-2 pt-1">
-                  July 18, 2024 10:00 to July 19, 2024 13:00
-                </div>
-                <div class="px-2">
-                  <span class="font-bold">Location: </span>Microsoft Teams
-                </div>
-                <div class="px-2 pb-1">
-                  <span class="font-bold">Organizer: </span>Spencer Van Buskirk
-                </div>
-                <div class="bg-gray-100 px-2 py-1">
-                  <div class="font-bold">Event Description</div>
-                  <div class="text-wrap">
-                    Generic description of event to talk about topics relating
-                    to PHAC
-                  </div>
+              <div class="px-2">
+                <span class="font-bold">Location: </span>Microsoft Teams
+              </div>
+              <div class="px-2 pb-1">
+                <span class="font-bold">Organizer: </span>Spencer Van Buskirk
+              </div>
+              <div class="px-2 py-1">
+                <div class="font-bold">Event Description</div>
+                <div class="text-wrap">
+                  Generic description of event to talk about topics relating to
+                  PHAC. Lorem ipsum dolor sit amet, consectetur psum dolor sit
+                  amet, consectetur.
                 </div>
               </div>
-              <div></div>
+            </div>
+            <div>
+              <div class="px-2 pt-1 font-bold">
+                Second Event (10:00 to 13:00)
+              </div>
+              <div class="px-2">
+                <span class="font-bold">Location: </span>Microsoft Teams
+              </div>
+              <div class="px-2 pb-1">
+                <span class="font-bold">Organizer: </span>Spencer Van Buskirk
+              </div>
+              <div class="px-2 py-1">
+                <div class="font-bold">Event Description</div>
+                <div class="text-wrap">
+                  Generic description of event to talk about topics relating to
+                  PHAC
+                </div>
+              </div>
             </div>
           </div>
         </hover-box>

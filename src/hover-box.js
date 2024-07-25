@@ -11,11 +11,68 @@ template.innerHTML = `
       padding: 0px;
       z-index: 999999;
     } 
+
+    .content-wrapper {
+      display: grid;
+      grid-auto-flow: row;
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
     
     #hover-trigger {
       width: max-content;
       height: max-content;
     }
+    
+    #header {
+      padding: 0.5rem;
+      background-color: #3788d8;
+      color: white;
+      font-size: 1.125rem;
+      line-height: 1.75rem;
+      font-weight: 700;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+
+    #title {
+      flex-grow: 1;
+    }
+
+    #close-wrapper {
+      flex-grow: 0;
+      width: fit-content;
+    }
+
+    #close-button {
+      border-radius: 0.375rem /* 6px */;
+      color: white;
+      background-color: inherit;
+      border: none;
+    }
+    
+    #close-button:hover,
+    #close-button:focus {
+      --tw-ring-offset-width: 2px;
+      --tw-ring-opacity: 1;
+      --tw-ring-color: rgb(55 65 81 / var(--tw-ring-opacity))  
+      --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+      --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+      box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+    }
+
   }
   </style>
 
@@ -24,7 +81,38 @@ template.innerHTML = `
       <slot name='hover-trigger'/>
     </div>
     <div id='hover-content' style='display:none'>
-      <slot name='hover-content' />
+      <div class="content-wrapper">
+        <div id='header'>
+          <div id='title'>Calendar Events</div>
+          <div id="close-wrapper">
+            <button
+              type="button"
+              id="close-button"
+            >
+              <span class="sr-only">Close</span>
+              <!-- Close Icon -->
+              <svg
+                style="height:1.5rem; width:1.5rem"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                ></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+          <div style='max-height: 250px; overflow-y: auto'>
+            <slot name='hover-content' />
+          </div>
+      </div>
     </div>
   </div>
 `;
@@ -46,6 +134,10 @@ customElements.define(
       this.shadowRoot.appendChild(template.content.cloneNode(true));
       this.hoverTrigger = this.shadowRoot.querySelector("#hover-trigger");
       this.hoverContent = this.shadowRoot.querySelector("#hover-content");
+      this.closeButton = this.shadowRoot.querySelector("#close-button");
+
+      const title = this.getAttribute("hover-title") ?? "";
+      this.shadowRoot.querySelector("#title").innerHTML = title;
 
       this.width = parseInt(this.getAttribute("width") ?? "500");
       this.color = this.getAttribute("color") ?? "balck";
@@ -78,10 +170,10 @@ customElements.define(
         this.getHiddenElementHeight(this.hoverContent);
 
       const rect = this.hoverTrigger.getBoundingClientRect();
-      const triggerTop = rect.top; // + window.scrollY;
-      const triggerLeft = rect.left; //  + window.scrollX;
-      const triggerBottom = rect.bottom; // + window.scrollY;
-      const triggerRight = rect.right; // + window.scrollX;
+      const triggerTop = rect.top;
+      const triggerLeft = rect.left;
+      const triggerBottom = rect.bottom;
+      const triggerRight = rect.right;
 
       let contentTop = 0;
       let contentLeft = 0;
@@ -115,12 +207,15 @@ customElements.define(
         if (this.timerHandle) {
           window.clearTimeout(this.timerHandle);
         }
-        // this.hoverContent.style.display = "none";
+      });
+      this.closeButton.addEventListener("click", () => {
+        this.hoverContent.style.display = "none";
       });
     }
 
     disconnectedCallback() {
       this.hoverTrigger.removeEventListener();
+      this.closeButton.removeEventListener();
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
