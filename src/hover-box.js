@@ -115,7 +115,7 @@ customElements.define(
         if (this.timerHandle) {
           window.clearTimeout(this.timerHandle);
         }
-        // this.hoverContent.style.display = "none";
+        this.hoverContent.style.display = "none";
       });
     }
 
