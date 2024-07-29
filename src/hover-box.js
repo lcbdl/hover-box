@@ -1,9 +1,9 @@
-const template = document.createElement("template");
+const template = document.createElement('template');
 template.innerHTML = `
   <style>
   :host {
     #hover-content {
-      position: absolute;
+      position: fixed;
       height: auto;
       border: solid 2px;
       border-radius: 0px;
@@ -32,7 +32,7 @@ template.innerHTML = `
 const OFFSET = 6;
 
 customElements.define(
-  "hover-box",
+  'hover-box',
   class HoverBox extends HTMLElement {
     constructor() {
       super();
@@ -41,16 +41,16 @@ customElements.define(
 
       this.timerHandle = undefined;
 
-      this.attachShadow({ mode: "open" });
+      this.attachShadow({ mode: 'open' });
 
       this.shadowRoot.appendChild(template.content.cloneNode(true));
-      this.hoverTrigger = this.shadowRoot.querySelector("#hover-trigger");
-      this.hoverContent = this.shadowRoot.querySelector("#hover-content");
+      this.hoverTrigger = this.shadowRoot.querySelector('#hover-trigger');
+      this.hoverContent = this.shadowRoot.querySelector('#hover-content');
 
-      this.width = parseInt(this.getAttribute("width") ?? "500");
-      this.color = this.getAttribute("color") ?? "balck";
-      this.backgroundColor = this.getAttribute("backgroundColor") ?? "white";
-      this.borderColor = this.getAttribute("borderColor") ?? "334155";
+      this.width = parseInt(this.getAttribute('width') ?? '500');
+      this.color = this.getAttribute('color') ?? 'balck';
+      this.backgroundColor = this.getAttribute('backgroundColor') ?? 'white';
+      this.borderColor = this.getAttribute('borderColor') ?? '334155';
 
       Object.assign(this.hoverContent.style, {
         color: this.color,
@@ -62,20 +62,19 @@ customElements.define(
 
     getHiddenElementHeight(ele) {
       Object.assign(ele.style, {
-        left: "-99999px",
-        display: "block",
+        left: '-99999px',
+        display: 'block',
       });
       const rect = ele.getBoundingClientRect();
       Object.assign(ele.style, {
-        left: "0px",
-        display: "none",
+        left: '0px',
+        display: 'none',
       });
       return rect;
     }
 
     onHover() {
-      const { height: contentHeight, width: contentWidth } =
-        this.getHiddenElementHeight(this.hoverContent);
+      const { height: contentHeight, width: contentWidth } = this.getHiddenElementHeight(this.hoverContent);
 
       const rect = this.hoverTrigger.getBoundingClientRect();
       const triggerTop = rect.top; // + window.scrollY;
@@ -89,33 +88,30 @@ customElements.define(
         contentTop = triggerBottom + OFFSET;
       } else {
         contentTop =
-          triggerTop - OFFSET - contentHeight < 0
-            ? triggerBottom + OFFSET
-            : triggerTop - OFFSET - contentHeight;
+          triggerTop - OFFSET - contentHeight < 0 ? triggerBottom + OFFSET : triggerTop - OFFSET - contentHeight;
       }
       if (triggerRight + contentWidth < window.innerWidth) {
         contentLeft = triggerLeft;
       } else {
-        contentLeft =
-          triggerRight - contentWidth <= 0 ? 0 : triggerRight - contentWidth;
+        contentLeft = triggerRight - contentWidth <= 0 ? 0 : triggerRight - contentWidth;
       }
 
       Object.assign(this.hoverContent.style, {
         left: `${contentLeft}px`,
         top: `${contentTop + window.scrollY}px`,
-        display: "block",
+        display: 'block',
       });
     }
 
     connectedCallback() {
-      this.hoverTrigger.addEventListener("mouseover", () => {
+      this.hoverTrigger.addEventListener('mouseover', () => {
         this.timerHandle = window.setTimeout(this.onHover, 500);
       });
-      this.hoverTrigger.addEventListener("mouseout", (e) => {
+      this.hoverTrigger.addEventListener('mouseout', (e) => {
         if (this.timerHandle) {
           window.clearTimeout(this.timerHandle);
         }
-        this.hoverContent.style.display = "none";
+        this.hoverContent.style.display = 'none';
       });
     }
 
@@ -124,9 +120,7 @@ customElements.define(
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
-      console.log(
-        `Attribute ${name} has changed. oldValue=${oldValue}, newValue=${newValue}`
-      );
+      console.log(`Attribute ${name} has changed. oldValue=${oldValue}, newValue=${newValue}`);
     }
   }
 );
